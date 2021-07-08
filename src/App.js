@@ -1,24 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router } from 'react-router-dom';
+import GlobalStyles from './GlobalStyles';
+import { Header } from './components/header/Header';
+import { Main } from './components/main/Main';
+import { Context } from './components/hooks/context';
+import { useState } from 'react';
+import { ModalCard } from './components/modalCard/ModalCard';
+import { Preloader } from './components/layoutComponent/Preloader';
 
 function App() {
+  const [token, setToken] = useState(localStorage.getItem('token'));
+  const [modalItem, setModalItem] = useState(false);
+  const [isFetching, setIsFetching] = useState(false);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router >
+      <GlobalStyles />
+      <Context.Provider value={{
+          token,
+          setToken,
+          modalItem,
+          setModalItem,
+          isFetching,
+          setIsFetching
+        }}
+      >
+        <Header />
+        <Main />
+        {modalItem && <ModalCard />}
+        {isFetching && <Preloader />}
+      </Context.Provider>
+    </Router>
   );
 }
 
