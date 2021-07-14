@@ -34,9 +34,8 @@ const CardItem = styled.div`
   }
 `;
 
-const TitleItem = styled.p`
+const TitleItem = styled.div`
   padding: 5px 30px;
-  margin: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -93,9 +92,13 @@ const CloseButton = styled.div`
 
 export const ModalCard = () => {
   const { modalItem, setModalItem } = useContext(Context);
-  const item = modalItem.animal || modalItem
-  console.log(modalItem);
-  return (<Overlay onClick={() => setModalItem(null)}>
+  const item = modalItem.animal || modalItem;
+
+  const closeModal = (e) => {
+    if(e.target.id === "overlay") setModalItem(null);
+  };
+  
+  return (<Overlay id="overlay" onClick={closeModal}>
       <CardItem >
         <CloseButton onClick={() => setModalItem(null)}/>
         <TitleItem >

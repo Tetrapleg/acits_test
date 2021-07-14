@@ -1,4 +1,4 @@
-import { BrowserRouter as Router } from 'react-router-dom';
+import { HashRouter as Router } from 'react-router-dom';
 import GlobalStyles from './GlobalStyles';
 import { Header } from './components/header/Header';
 import { Main } from './components/main/Main';

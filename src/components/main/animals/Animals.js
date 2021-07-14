@@ -1,9 +1,11 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import axios from "axios";
 import { Context } from "../../hooks/context";
 import { Container } from "../../layoutComponent/Container";
 import styled from 'styled-components';
 import { ItemWrapper } from "../../layoutComponent/ItemWrapper";
+import { useFetch } from "../../hooks/useFetch";
+import { Redirect } from "react-router";
 
 const Pagination = styled.nav`
   padding: 15px;
@@ -25,39 +27,16 @@ const DisabledSpan = styled.span`
 `;
 
 export const Animals = () => {
-  const { token, setToken, setModalItem, isFetching, setIsFetching } = useContext(Context);
+  const { token, setToken, setModalItem, setIsFetching } = useContext(Context);
   const [dataAnimals, setDataAnimals] = useState(null);
-  const [paginationPage, setPaginationPage] = useState(0);
-  const [paginationCount, setPaginatiobCount] = useState(0);
+  const paginationCount = useFetch("/animals/?limit=5&offset=0", setDataAnimals);
+  const [paginationPage, setPaginationPage] = useState(1);
 
   const paginationArray = [];
 
   for(let i = 0; i < paginationCount; i++) {
     paginationArray.push(i + 1);
-  }
-
-  useEffect(() => {
-    (async() => {
-      if(!isFetching) setIsFetching(true);
-      await axios.get("https://acits-test-back.herokuapp.com/api/animals/?limit=5&offset=0", { 
-        headers: { 
-          'Authorization': 'Bearer ' + token,
-          'Content-Type': 'application/json',
-        } 
-      })
-      .then(res => {
-        setDataAnimals(res.data);
-        setPaginationPage(1);
-        setPaginatiobCount(Math.ceil(res.data.count / 5));
-      }) 
-      .catch(error => {
-        setToken(null);
-        localStorage.removeItem('token');
-        console.warn(error, "errror");
-      });
-      setIsFetching(false);
-    })();
-  }, []);
+  };
 
   const changePage = async(page) => {
     setIsFetching(true);
@@ -78,6 +57,10 @@ export const Animals = () => {
     });
     setIsFetching(false);
   };
+
+  if(!token) return (<>
+    <Redirect to="/login"/>
+  </>);
 
   return (
     <Container>

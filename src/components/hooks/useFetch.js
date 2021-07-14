@@ -2,11 +2,10 @@ import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { Context } from "./context"
 
-export const useFetch = ({ method }) => {
+export const useFetch = ( method, setData ) => {
   const { token, setToken,isFetching, setIsFetching } = useContext(Context);
-  const [data, setData] = useState(null);
   const [paginationCount, setPaginatiobCount] = useState(0);
-  debugger;
+
   useEffect(() => {
     (async() => {
       if(!isFetching) setIsFetching(true);
@@ -30,5 +29,7 @@ export const useFetch = ({ method }) => {
     })();
   }, []);
 
-  return { data, paginationCount };
+  if(paginationCount) return paginationCount;
+
+  return;
 };

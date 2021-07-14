@@ -28,7 +28,7 @@ const useStyles = makeStyles(() => ({
 
 export const Login = () => {
   const styles = useStyles();
-  const { setToken, setIsFetching } = useContext(Context);
+  const { token, setToken, setIsFetching } = useContext(Context);
   const [reqestError, setReqestError] = useState(false);
 
   const { register, handleSubmit, formState: {
@@ -47,7 +47,6 @@ export const Login = () => {
     .then(res => {
       setToken(res.data.accessToken);
       localStorage.setItem('token', res.data.accessToken);
-      return <Redirect to="/today"/>;
     }) 
     .catch(error => {
       console.warn(error);
@@ -55,6 +54,10 @@ export const Login = () => {
       setIsFetching(false);
     });
   };
+
+  if(token) return (<>
+    <Redirect to="/today"/>
+  </>);
 
   return (
     <Container>
